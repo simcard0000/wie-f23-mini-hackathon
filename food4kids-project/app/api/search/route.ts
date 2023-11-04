@@ -47,8 +47,14 @@ export async function GET(req: Request): Promise<NextResponse<ResponseData>> {
 
     for (const category of data.searchResults) {
         if (category.name === 'Simple Foods') {
+            for (const result of category.results) {
+                result.id = `S${result.id}`;
+            }
             response.simpleFoods = category.results;
         } else if (category.name === 'Products') {
+            for (const result of category.results) {
+                result.id = `P${result.id}`;
+            }
             response.products = category.results;
         }
     }

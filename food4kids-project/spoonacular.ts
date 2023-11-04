@@ -12,16 +12,16 @@ export async function spoonacular(
     for (const key in params) {
         url.searchParams.set(key, params[key]);
     }
-    url.searchParams.set('apiKey', SPOONACULAR_API_KEY);
 
-    const cached = await getCache(url);
+    const cacheFile = getCacheFile(url);
+    const cached = await getCache(cacheFile);
+    const log = `spoonacular ${method} ${url.pathname}${url.search}`;
     if (cached !== undefined) {
-        console.log(
-            `spoonacular ${method} ${url.pathname}${url.search} = cached`,
-        );
+        console.log(`${log} = cached`);
         return cached;
     }
 
+    url.searchParams.set('apiKey', SPOONACULAR_API_KEY);
     const init: RequestInit = {
         method,
         headers: { accept: 'application/json' },
@@ -40,16 +40,14 @@ export async function spoonacular(
     const quotaLeft =
         response.headers.get('X-API-Quota-Left')?.replace(/\.0*$/, '') || '?';
     console.log(
-        `spoonacular ${method} ${url.pathname}${url.search} = ${response.status} ` +
-            `[+${quotaRequest}] [${quotaUsed}/${quotaLeft}]`,
+        `${log} = ${response.status} [+${quotaRequest}] [${quotaUsed}/${quotaLeft}]`,
     );
     const data = await response.json();
-    await saveCache(url, data);
+    await saveCache(cacheFile, data);
     return data;
 }
 
-async function getCache(url: URL): Promise<object | undefined> {
-    const file = getCacheFile(url);
+async function getCache(file: string): Promise<object | undefined> {
     try {
         const data = await fs.readFile(file, { encoding: 'utf-8' });
         return JSON.parse(data);
@@ -58,8 +56,7 @@ async function getCache(url: URL): Promise<object | undefined> {
     }
 }
 
-async function saveCache(url: URL, data: object): Promise<void> {
-    const file = getCacheFile(url);
+async function saveCache(file: string, data: object): Promise<void> {
     try {
         await fs.mkdir('cache');
     } catch (e) {}
@@ -74,7 +71,7 @@ async function saveCache(url: URL, data: object): Promise<void> {
 function getCacheFile(url: URL): string {
     const key = `${url.pathname}${url.search}`;
     const hash = crypto.createHash('sha1').update(key).digest('base64url');
-    const name = key.replace(/[<>:"/\\|?*]/g, ',');
+    const name = key.replace(/[^A-Za-z0-9-_&=.,]/g, '_');
     let fullName = hash + name;
     if (fullName.length > 120) {
         fullName = fullName.substring(0, 120);
