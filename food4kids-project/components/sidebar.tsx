@@ -1,4 +1,6 @@
-import { Card, CardList, Section, SectionCard, Button } from "@blueprintjs/core";
+import React, { useEffect, useState } from 'react'
+import { Card, CardList, Section, SectionCard, Button, Icon } from "@blueprintjs/core";
+
 
 type Package = {
     name: string;
@@ -8,12 +10,25 @@ type Package = {
     selected?: boolean;
 }
 
+const savedMeals = useState([]);
+
+function setSelection(props: Package) {
+    props.selected = !props.selected;
+}
+
 function Item(props: Package) {
     const { name, preset, calories, weight, selected } = props;
 
     return (
-        <Card interactive={true} elevation={selected ? 4 : 1} compact className="flex flex-row ml-auto" selected={selected}>
-            <div className="flex flex-col ml-auto w-full">
+        <Card 
+            interactive={true} 
+            elevation={selected ? 4 : 0} 
+            compact={true}
+            className="flex flex-row ml-auto" 
+            selected={selected}
+            onClick={() => setSelection(props)}
+        >
+            <div className="flex flex-col ml-auto w-full pr-5">
                 <div className="flex flex-row justify-between text-sm font-bold">
                     <div>{name}</div>
                     <div className="text-right">{weight} g</div>
@@ -29,14 +44,21 @@ function Item(props: Package) {
 }
 
 export default function Sidebar() {
-    const savedMeals: Package[] = [];
-    savedMeals.push({name: "Monday", preset: "Young Teens", calories: 100, weight: 100});
-
     return (
-        <aside className="flex flex-col w-64 h-screen bg-white border-r">
-            <Section title={<h2 className="py-5">Food4Kids Nutrition Calculator</h2>} subtitle="Calculate the nutrition + weight of your food selection and save your package" className="h-full">
-                <SectionCard padded={false}>
-                    <CardList title="Meals">
+        <aside className="flex flex-col w-72 h-screen bg-white border-r">
+            <Section 
+                title="Food4Kids Nutrition Calculator"
+                subtitle="Calculate the nutrition + weight of your food selection and save your package"
+                className="py-5"
+            >
+            </Section>
+            <Section 
+                title="Packages"
+                rightElement={<Button icon="plus" minimal />}
+                elevation={0}
+            >
+                <SectionCard padded={false} >
+                    <CardList>
                         {savedMeals.map((item) => (
                             <Item {...item} />
                         ))}
