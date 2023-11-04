@@ -22,6 +22,6 @@ type ResponseData = {
 
 export async function GET(req: Request): Promise<NextResponse<ResponseData>> {
     const query = new URL(req.url).searchParams.get('q')?.toString() ?? '';
-    const data = await nutritionix('GET', '/search/instant', {}, { query });
+    const data = await nutritionix('GET', '/search/instant', { query });
     return NextResponse.json(data as ResponseData);
 }
