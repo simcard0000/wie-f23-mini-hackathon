@@ -11,7 +11,11 @@ import { type ItemRenderer, Suggest } from "@blueprintjs/select";
 import { useEffect, useState } from "react";
 import { type SearchResult } from "@/types";
 
-export default function SearchAddFood() {
+interface SearchAddProps {
+  addItemToPackage: (newItem: SearchResult) => void;
+}
+
+export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
   let matchTargetWidth: boolean = false;
   let minimal: boolean = true;
 
@@ -34,13 +38,8 @@ export default function SearchAddFood() {
   const renderInputValue = (res: SearchResult) => res.name;
 
   const handleValueChange = (selectedRes: SearchResult) => {
-    // Once a food item is selected, we need to add it to the food list below
     setSelectedItems(selectedRes);
-  };
-
-  const filterItems = (query: string, items: SearchResult[]) => {
-    setCurrentSearch(query);
-    return items;
+    addItemToPackage(selectedRes);
   };
 
   const renderFoodItem = (res: SearchResult) => {
@@ -48,7 +47,6 @@ export default function SearchAddFood() {
     if (res.name.length > 50) {
       truncated_name = res.name.substring(0, 50) + "...";
     }
-
     return (
       <MenuItem
         text={truncated_name}
@@ -64,7 +62,7 @@ export default function SearchAddFood() {
   };
 
   return (
-    <div className="flex flex-column">
+    <div className="flex flex-col">
       <Card interactive={false} elevation={Elevation.ONE} className="w-full">
         <form
           onSubmit={(e) => {
