@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardList, Section, SectionCard, Button } from '@blueprintjs/core';
-import { Package } from '../types';
+import React, { useEffect, useState } from "react";
+import {
+  Card,
+  CardList,
+  Section,
+  SectionCard,
+  Button,
+} from "@blueprintjs/core";
+import { Package } from "../types";
+import { type SearchResult } from "@/types";
 
 const defaultPackage: Package = {
-  name: 'Untitled',
-  preset: 'Custom',
+  name: "Untitled",
+  preset: "Custom",
   calories: 0,
   weight: 0,
+  food: [],
 };
 
 interface SidebarProps {
@@ -26,7 +34,10 @@ export default function Sidebar({
     const newPackage = { ...defaultPackage };
     setSelectedPackage(newPackage);
     setSavedPackages([newPackage, ...savedPackages]);
-    localStorage.setItem('packages', JSON.stringify([newPackage, ...savedPackages]));
+    localStorage.setItem(
+      "packages",
+      JSON.stringify([newPackage, ...savedPackages])
+    );
   };
 
   const renderPackage = (props: Package, index: number) => {
@@ -39,39 +50,47 @@ export default function Sidebar({
         interactive={true}
         elevation={selected ? 4 : 0}
         compact={true}
-        className='flex flex-row ml-auto bg-slate-200'
+        className="flex flex-row ml-auto bg-slate-200"
         selected={selected}
         onClick={() => {
           if (selected) return;
           setSelectedPackage(selected ? null : props);
-          setSavedPackages(savedPackages.filter(p => p !== defaultPackage));
-          localStorage.setItem('packages', JSON.stringify(savedPackages.filter(p => p.calories !== 0)));
+          setSavedPackages(savedPackages.filter((p) => p !== defaultPackage));
+          localStorage.setItem(
+            "packages",
+            JSON.stringify(savedPackages.filter((p) => p.calories !== 0))
+          );
         }}
       >
-        <div className='flex flex-col ml-auto w-full pr-2'>
-          <div className='flex flex-row justify-between text-sm font-bold'>
+        <div className="flex flex-col ml-auto w-full pr-2">
+          <div className="flex flex-row justify-between text-sm font-bold">
             <div>{name}</div>
-            <div className='text-right'>{weight} g</div>
+            <div className="text-right">{weight} g</div>
           </div>
-          <div className='flex flex-row justify-between text-xs'>
+          <div className="flex flex-row justify-between text-xs">
             <div>{preset}</div>
-            <div className='text-right'>{calories} kcal</div>
+            <div className="text-right">{calories} kcal</div>
           </div>
         </div>
-        <Button icon='chevron-right' minimal={true} />
+        <Button icon="chevron-right" minimal={true} />
       </Card>
     );
   };
 
   return (
-    <aside className='flex flex-col w-72 h-screen border-r bg-slate-300'>
-      <img src='/logo.png' className='bg-slate-300 p-5'/>
+    <aside className="flex flex-col w-72 h-screen border-r bg-slate-300">
+      <img src="/logo.png" className="bg-slate-300 p-5" />
       <Section
-        title={<p className='text-2xl py-2'>Nutrition Calculator</p>}
-        subtitle='Calculate the nutrition + weight of your food selection and save your package'
-        className='bg-slate-300 py-5'
+        title={<p className="text-2xl py-2">Nutrition Calculator</p>}
+        subtitle="Calculate the nutrition + weight of your food selection and save your package"
+        className="bg-slate-300 py-5"
       ></Section>
-      <Section title='Packages' rightElement={<Button icon='plus' minimal onClick={addPackage} />} elevation={0} className='bg-slate-200'>
+      <Section
+        title="Packages"
+        rightElement={<Button icon="plus" minimal onClick={addPackage} />}
+        elevation={0}
+        className="bg-slate-200"
+      >
         <SectionCard padded={false}>
           <CardList>{savedPackages.map(renderPackage)}</CardList>
         </SectionCard>

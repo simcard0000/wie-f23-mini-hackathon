@@ -18,6 +18,8 @@ export default function FoodTable({ selectedPackageFood }: FoodTableProps) {
   return (
     <HotkeysProvider>
       <Table2 numRows={10}>
+        <Column name="Food Name" />
+
         <Column name="Dollars" cellRenderer={dollarCellRenderer} />
         <Column name="Euros" cellRenderer={euroCellRenderer} />
       </Table2>

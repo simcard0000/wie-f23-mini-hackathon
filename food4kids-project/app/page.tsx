@@ -31,6 +31,7 @@ export default function Home() {
   };
 
   const addItemToPackage = (newItem: SearchResult) => {
+    console.log(newItem);
     if (!selectedPackage) return;
     let newFoodList = selectedPackage.food;
     newFoodList.push(newItem);
