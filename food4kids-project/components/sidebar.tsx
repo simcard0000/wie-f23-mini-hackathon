@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useEffect, useState, Key } from 'react';
 import { Card, CardList, Section, SectionCard, Button, Icon } from '@blueprintjs/core';
 
 type Package = {
@@ -20,26 +20,10 @@ export default function Sidebar() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
 
   useEffect(() => {
-    setSavedPackages([
-      {
-        name: 'Package 1',
-        preset: 'Custom',
-        calories: 1000,
-        weight: 1000,
-      },
-      {
-        name: 'Package 2',
-        preset: 'Custom',
-        calories: 1000,
-        weight: 1000,
-      },
-      {
-        name: 'Package 3',
-        preset: 'Custom',
-        calories: 1000,
-        weight: 1000,
-      },
-    ]);
+    const packages = JSON.parse(localStorage.getItem('packages') ?? '[]');
+    console.log(packages);
+    setSelectedPackage(packages ? packages[0] : null);
+    setSavedPackages(packages);
   }, []);
 
   const addPackage = () => {
@@ -51,12 +35,13 @@ export default function Sidebar() {
     ]);
   }
 
-  const renderPackage = (props: Package) => {
+  const renderPackage = (props: Package, index: number) => {
     const { name, preset, calories, weight } = props;
     const selected = selectedPackage === props;
   
     return (
       <Card
+        key={index}
         interactive={true}
         elevation={selected ? 4 : 0}
         compact={true}
