@@ -35,7 +35,7 @@ export default function Sidebar({
     setSelectedPackage(newPackage);
     setSavedPackages([newPackage, ...savedPackages]);
     localStorage.setItem(
-      "packages",
+      "pkg2",
       JSON.stringify([newPackage, ...savedPackages])
     );
   };
@@ -57,7 +57,7 @@ export default function Sidebar({
           setSelectedPackage(selected ? null : props);
           setSavedPackages(savedPackages.filter((p) => p !== defaultPackage));
           localStorage.setItem(
-            "packages",
+            "pkg2",
             JSON.stringify(savedPackages.filter((p) => p.calories !== 0))
           );
         }}
