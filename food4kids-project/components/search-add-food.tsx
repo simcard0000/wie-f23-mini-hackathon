@@ -61,8 +61,6 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
           }}
         >
           <Suggest<SearchResult>
-            resetOnQuery={false}
-            resetOnClose={false}
             closeOnSelect={false}
             inputValueRenderer={renderInputValue}
             items={items}
