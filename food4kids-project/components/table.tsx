@@ -16,8 +16,10 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
     []
   );
   const [totalStat, settotalStat] = React.useState<Stats>(new Stats());
+  const [rec, setRec] = React.useState(0);
 
   React.useEffect(() => {
+    console.log("recomputing");
     const mySimpleFoodStats = selectedPackage.simpleFoods.map(
       Stats.fromSimpleFood
     );
@@ -34,6 +36,7 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
         .concat(selectedPackage.products.map((element) => element.quantity))
     );
     settotalStat(calculateTotalStats(selectedPackage));
+    setRec((r) => r + 1);
   }, [selectedPackage]);
 
   const statCellRenderer = (rowIndex: number, columnIndex: number) => {
@@ -63,7 +66,7 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
   return (
     <div className="overflow-x-auto overflow-y-auto w-full">
       <HotkeysProvider>
-        <Table2 numRows={overallNames.length + 1}>
+        <Table2 numRows={overallNames.length + 1} key={rec}>
           {[
             <Column
               name="Food Name"
