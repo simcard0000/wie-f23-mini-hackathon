@@ -62,7 +62,7 @@ export default function Home() {
             setSelectedPackage,
           }}
         />
-        <div className="flex flex-col w-full bg-slate-200">
+        <div className="flex flex-col flex-1 w-full bg-slate-200">
           <SearchAddFood {...{ addItemToPackage }} />
           {selectedPackage && (
             <EditDetails {...{ selectedPackage, editSelectedPackage }} />
