@@ -33,6 +33,10 @@ export default function Sidebar() {
       newPackage,
       ...savedPackages,
     ]);
+    localStorage.setItem('packages', JSON.stringify([
+      newPackage,
+      ...savedPackages,
+    ]));
   }
 
   const renderPackage = (props: Package, index: number) => {
@@ -48,8 +52,10 @@ export default function Sidebar() {
         className='flex flex-row ml-auto'
         selected={selected}
         onClick={() => {
+          if (selected) return;
           setSelectedPackage(selected ? null : props);
           setSavedPackages(savedPackages.filter(p => p.calories !== 0));
+          localStorage.setItem('packages', JSON.stringify(savedPackages.filter(p => p.calories !== 0)));
         }}
       >
         <div className='flex flex-col ml-auto w-full pr-5'>
