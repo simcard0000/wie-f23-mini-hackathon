@@ -109,3 +109,10 @@ export interface ProductInfo {
     ingredientCount: number;
     ingredientList: string;
 }
+
+export interface Package {
+    name: string;
+    preset: string;
+    calories: number;
+    weight: number;
+}
