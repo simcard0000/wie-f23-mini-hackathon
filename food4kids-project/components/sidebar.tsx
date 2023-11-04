@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Card,
   CardList,
@@ -7,14 +7,14 @@ import {
   Button,
 } from "@blueprintjs/core";
 import { Package } from "../types";
-import { type SearchResult } from "@/types";
 
 const defaultPackage: Package = {
   name: "Untitled",
   preset: "Custom",
   calories: 0,
   weight: 0,
-  food: [],
+  products: [],
+  simpleFoods: [],
 };
 
 interface SidebarProps {
@@ -79,7 +79,7 @@ export default function Sidebar({
 
   return (
     <aside className="flex flex-col w-72 h-screen border-r bg-slate-300">
-      <img src="/logo.png" className="bg-slate-300 p-5" />
+      <img src="/logo.png" alt="logo" className="bg-slate-300 p-5" />
       <Section
         title={<p className="text-2xl py-2">Nutrition Calculator</p>}
         subtitle="Calculate the nutrition + weight of your food selection and save your package"

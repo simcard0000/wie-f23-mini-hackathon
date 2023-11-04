@@ -13,7 +13,6 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
   let minimal: boolean = true;
 
   const [items, setItems] = useState<SearchResult[]>([]);
-  const [selectedItem, setSelectedItems] = useState<SearchResult | null>(null);
   const [currentText, setCurrentText] = useState<string>("");
   const [currentSearch, setCurrentSearch] = useState<string>("");
 
@@ -31,7 +30,6 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
   const renderInputValue = (res: SearchResult) => res.name;
 
   const handleValueChange = (selectedRes: SearchResult) => {
-    setSelectedItems(selectedRes);
     addItemToPackage(selectedRes);
   };
 
@@ -48,7 +46,6 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
         }
         icon="add"
         roleStructure="listoption"
-        selected={res === selectedItem}
         key={res.id}
       />
     );
