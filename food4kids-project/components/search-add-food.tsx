@@ -4,6 +4,7 @@ import { Icon, InputGroup } from "@blueprintjs/core";
 export default function SearchAddFood() {
   return (
     <>
+      <div className="w-full">
         <InputGroup
             //disabled={disabled}
             //large={large}
@@ -13,6 +14,7 @@ export default function SearchAddFood() {
             type="search"
             leftIcon="search"
         />
+      </div>
     </>
   )
 }

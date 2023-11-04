@@ -1,12 +1,13 @@
 'use client'
 
-import Image from 'next/image'
+import Sidebar from '@/components/sidebar'
 import SearchAddFood from '@/components/search-add-food'
 
 export default function Home() {
   return (
-    <>
-        <SearchAddFood />
-    </>
+    <div className='flex flex-horizontal text-left w-full'>
+      <Sidebar />
+      <SearchAddFood />
+    </div>
   )
 }
