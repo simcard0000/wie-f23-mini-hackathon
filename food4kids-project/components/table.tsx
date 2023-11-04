@@ -8,11 +8,26 @@ interface FoodTableProps {
   selectedPackage: Package;
 }
 
-const statCellRenderer = (rowIndex: number, columnIndex: number) => {
-  return <Cell />;
-};
-
 export default function FoodTable({ selectedPackage }: FoodTableProps) {
+  let mySimpleFoodStats = selectedPackage.simpleFoods.map(Stats.fromSimpleFood);
+  let myProductStats = selectedPackage.products.map(Stats.fromProduct);
+  let overallStats = myProductStats.concat(mySimpleFoodStats);
+  let overallNames = selectedPackage.simpleFoods
+    .map((element) => element.name)
+    .concat(selectedPackage.products.map((element) => element.title));
+
+  const statCellRenderer = (rowIndex: number, columnIndex: number) => {
+    return (
+      <Cell>
+        {overallStats.at(rowIndex)?.values[Object.values(Stat)[columnIndex]]}
+      </Cell>
+    );
+  };
+
+  const foodNameRenderer = (rowIndex: number) => {
+    return <Cell>{overallNames[rowIndex]}</Cell>;
+  };
+
   return (
     <div className="overflow-x-auto overflow-y-auto w-full">
       <HotkeysProvider>
@@ -21,7 +36,7 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
             <Column
               name="Food Name"
               key="food-name"
-              cellRenderer={statCellRenderer}
+              cellRenderer={foodNameRenderer}
             />,
             ...Object.values(Stat).map((stat) => (
               <Column name={stat} key={stat} cellRenderer={statCellRenderer} />

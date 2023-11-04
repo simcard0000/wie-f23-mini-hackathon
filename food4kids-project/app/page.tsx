@@ -53,18 +53,16 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-row w-full max-w-full h-full">
-        <div className="flex-0">
-          <Sidebar
-            {...{
-              savedPackages,
-              setSavedPackages,
-              selectedPackage,
-              setSelectedPackage,
-            }}
-          />
-        </div>
-        <div className="flex flex-col flex-1 w-full bg-slate-200">
+      <div className="flex flex-row w-full h-full">
+        <Sidebar
+          {...{
+            savedPackages,
+            setSavedPackages,
+            selectedPackage,
+            setSelectedPackage,
+          }}
+        />
+        <div className="flex flex-col flex-1 min-w-0 bg-slate-200">
           <SearchAddFood {...{ addItemToPackage }} />
           {selectedPackage && (
             <EditDetails {...{ selectedPackage, editSelectedPackage }} />
