@@ -1,7 +1,7 @@
 import { Stat, Stats } from "./stats";
 import { Package, ProductInfo, SimpleFoodInfo } from "./types";
 
-function calculateTotalStats(pkg: Package): Stats {
+export function calculateTotalStats(pkg: Package): Stats {
   return Stats.sum(
     ...pkg.simpleFoods.map(Stats.fromSimpleFood),
     ...pkg.products.map(Stats.fromProduct)
@@ -12,11 +12,11 @@ function calculateRank(stats: Stats): number {
   let r = 0;
   for (const stat of Object.values(Stat)) {
     if (stat === Stat.Price || stat === Stat.Weight) continue;
-    const delta = stats.values[stat] - 100;
-    r += delta * delta;
+    let delta = stats.values[stat] - 50;
+    r += Math.abs(delta);
   }
-  r += stats.values.Price;
-  r += stats.values.Weight;
+  r += stats.values.Price * 0.01;
+  r += stats.values.Weight * 0.01;
   return r;
 }
 
@@ -45,7 +45,7 @@ export function optimizeQuantities(input: Package): Package {
     let bestFood: SimpleFoodInfo | ProductInfo | null = null;
     let bestRank = rank;
     for (const food of pkg.simpleFoods) {
-      if (food.quantity < 5) {
+      if (food.quantity < 2) {
         food.quantity += 1;
         const newRank = calculateRank(calculateTotalStats(pkg));
         if (newRank < bestRank) {
@@ -55,8 +55,20 @@ export function optimizeQuantities(input: Package): Package {
         food.quantity -= 1;
       }
     }
+    for (const product of pkg.products) {
+      if (product.quantity < 2) {
+        product.quantity += 1;
+        const newRank = calculateRank(calculateTotalStats(pkg));
+        if (newRank < bestRank) {
+          bestFood = product;
+          bestRank = newRank;
+        }
+        product.quantity -= 1;
+      }
+    }
     if (!bestFood) break;
     bestFood.quantity += 1;
+    rank = bestRank;
   }
 
   return pkg;

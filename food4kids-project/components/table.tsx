@@ -3,6 +3,7 @@ import { HotkeysProvider } from "@blueprintjs/core";
 import { Cell, Column, Table2 } from "@blueprintjs/table";
 import { Package } from "@/types";
 import { Stat, Stats } from "@/stats";
+import { calculateTotalStats } from "@/calculator";
 
 interface FoodTableProps {
   selectedPackage: Package;
@@ -11,9 +12,12 @@ interface FoodTableProps {
 export default function FoodTable({ selectedPackage }: FoodTableProps) {
   const [overallStats, setOverallStats] = React.useState<Stats[]>([]);
   const [overallNames, setOverallNames] = React.useState<string[]>([]);
+  const [overallQuantities, setOverallQuantities] = React.useState<number[]>(
+    []
+  );
+  const [totalStat, settotalStat] = React.useState<Stats>(new Stats());
 
   React.useEffect(() => {
-    console.log("recomput");
     const mySimpleFoodStats = selectedPackage.simpleFoods.map(
       Stats.fromSimpleFood
     );
@@ -24,29 +28,52 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
         .map((element) => element.name)
         .concat(selectedPackage.products.map((element) => element.title))
     );
+    setOverallQuantities(
+      selectedPackage.simpleFoods
+        .map((element) => element.quantity)
+        .concat(selectedPackage.products.map((element) => element.quantity))
+    );
+    settotalStat(calculateTotalStats(selectedPackage));
   }, [selectedPackage]);
 
   const statCellRenderer = (rowIndex: number, columnIndex: number) => {
+    const stat = Object.values(Stat)[columnIndex - 2];
+    const x =
+      Math.round(
+        (rowIndex === overallNames.length ? totalStat : overallStats[rowIndex])
+          .values[stat] * 10
+      ) / 10;
     return (
       <Cell>
-        {overallStats.at(rowIndex)?.values[Object.values(Stat)[columnIndex]]}
+        {x ? x + (stat === Stat.Price || stat === Stat.Weight ? "" : "%") : ""}
       </Cell>
     );
   };
 
   const foodNameRenderer = (rowIndex: number) => {
+    if (rowIndex === overallNames.length) return <Cell>Total</Cell>;
     return <Cell>{overallNames[rowIndex]}</Cell>;
+  };
+
+  const quantityRenderer = (rowIndex: number) => {
+    if (rowIndex === overallNames.length) return <Cell></Cell>;
+    return <Cell>{overallQuantities[rowIndex]}</Cell>;
   };
 
   return (
     <div className="overflow-x-auto overflow-y-auto w-full">
       <HotkeysProvider>
-        <Table2 numRows={overallNames.length}>
+        <Table2 numRows={overallNames.length + 1}>
           {[
             <Column
               name="Food Name"
               key="food-name"
               cellRenderer={foodNameRenderer}
+            />,
+            <Column
+              name="Quantity"
+              key="qty"
+              cellRenderer={quantityRenderer}
             />,
             ...Object.values(Stat).map((stat) => (
               <Column name={stat} key={stat} cellRenderer={statCellRenderer} />

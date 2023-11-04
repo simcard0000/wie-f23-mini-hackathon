@@ -74,7 +74,6 @@ export default function EditDetails({
                   "Young Teen (11-14)",
                   "Child (7-10)",
                   "Young Child (3-6)",
-                  "Toddler (1-3)",
                 ].map((text) => renderPresetItem(text))}
               </Menu>
             }
