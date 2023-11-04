@@ -1,4 +1,4 @@
-/** Search result from Nutritionix database */
+/** Search result from Spoonacular database */
 export interface SearchResult {
     id: string;
     name: string;
