@@ -62,7 +62,7 @@ export default function SearchAddFood() {
 
   return (
     <>
-    <Card interactive={false} elevation={Elevation.TWO}>
+    <Card interactive={false} elevation={Elevation.ONE} className='w-full'>
       <Suggest<SearchResult>
         inputValueRenderer={renderInputValue}
         items={items}
