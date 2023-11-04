@@ -28,7 +28,7 @@ export default function Home() {
     <>
     <div className='flex flex-row w-full h-full'>
       <Sidebar {...{ savedPackages, setSavedPackages, selectedPackage, setSelectedPackage }} />
-      <div className='flex flex-col w-full'>
+      <div className='flex flex-col w-full bg-slate-200'>
         <SearchAddFood />
         <EditDetails {...{ selectedPackage, editSelectedPackage }} />
       </div>

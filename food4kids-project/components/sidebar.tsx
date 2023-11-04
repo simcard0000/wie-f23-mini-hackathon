@@ -39,7 +39,7 @@ export default function Sidebar({
         interactive={true}
         elevation={selected ? 4 : 0}
         compact={true}
-        className='flex flex-row ml-auto'
+        className='flex flex-row ml-auto bg-slate-200'
         selected={selected}
         onClick={() => {
           if (selected) return;
@@ -58,19 +58,20 @@ export default function Sidebar({
             <div className='text-right'>{calories} kcal</div>
           </div>
         </div>
-        <Button icon='chevron-right' minimal={true} disabled={true} />
+        <Button icon='chevron-right' minimal={true} />
       </Card>
     );
   };
 
   return (
-    <aside className='flex flex-col w-72 h-screen bg-white border-r'>
+    <aside className='flex flex-col w-72 h-screen border-r bg-slate-300'>
+      <img src='/logo.png' className='bg-slate-300 p-5'/>
       <Section
-        title='Food4Kids Nutrition Calculator'
+        title={<p className='text-2xl py-2'>Nutrition Calculator</p>}
         subtitle='Calculate the nutrition + weight of your food selection and save your package'
-        className='py-5'
+        className='bg-slate-300 py-5'
       ></Section>
-      <Section title='Packages' rightElement={<Button icon='plus' minimal onClick={addPackage} />} elevation={0}>
+      <Section title='Packages' rightElement={<Button icon='plus' minimal onClick={addPackage} />} elevation={0} className='bg-slate-200'>
         <SectionCard padded={false}>
           <CardList>{savedPackages.map(renderPackage)}</CardList>
         </SectionCard>

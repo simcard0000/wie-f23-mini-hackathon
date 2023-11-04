@@ -65,7 +65,7 @@ export default function SearchAddFood() {
 
   return (
     <div className="flex flex-column">
-      <Card interactive={false} elevation={Elevation.ONE}>
+      <Card interactive={false} elevation={Elevation.ONE} className="w-full">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -93,14 +93,6 @@ export default function SearchAddFood() {
           />
         </form>
       </Card>
-      <CardList>
-        <Card>Basil</Card>
-        <Card>Olive oil</Card>
-        <Card>Kosher Salt</Card>
-        <Card>Garlic</Card>
-        <Card>Pine nuts</Card>
-        <Card>Parmigiano Reggiano</Card>
-      </CardList>
     </div>
   );
 }
