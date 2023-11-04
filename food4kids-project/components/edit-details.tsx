@@ -11,6 +11,7 @@ import {
   Icon,
 } from "@blueprintjs/core";
 import { Package } from "../types";
+import { optimizeQuantities } from "@/calculator";
 
 interface EditDetailsProps {
   selectedPackage: Package;
@@ -56,7 +57,7 @@ export default function EditDetails({
             onValueChange={(value: string) => setSavedName(value)}
             rightElement={
               <Button
-                text="Submit"
+                text="Save"
                 disabled={savedName === name}
                 onClick={() => {
                   editSelectedPackage({ ...selectedPackage, name: savedName });
@@ -85,6 +86,15 @@ export default function EditDetails({
               text={savedPreset}
             />
           </Popover>
+
+          <Button
+            className="ml-4"
+            icon="calculator"
+            text="Optimize Quantities"
+            onClick={() =>
+              editSelectedPackage(optimizeQuantities(selectedPackage))
+            }
+          />
         </FormGroup>
       </Card>
     </>

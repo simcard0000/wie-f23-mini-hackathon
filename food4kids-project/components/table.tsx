@@ -14,7 +14,7 @@ const statCellRenderer = (rowIndex: number, columnIndex: number) => {
 
 export default function FoodTable({ selectedPackage }: FoodTableProps) {
   return (
-    <div className="overflow-x-auto overflow-y-auto">
+    <div className="overflow-x-auto overflow-y-auto w-full">
       <HotkeysProvider>
         <Table2 numRows={10}>
           {[

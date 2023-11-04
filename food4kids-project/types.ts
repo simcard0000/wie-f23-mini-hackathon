@@ -17,11 +17,13 @@ export interface Nutrient {
 }
 
 export interface SimpleFoodInfo {
+  quantity: number;
+
   id: string;
   original: string;
   originalName: string;
   name: string;
-  amount: number;
+  // amount: number; // DO NOT USE - you want to use 'quantity'
   unit: string;
   unitShort: string;
   unitLong: string;
@@ -68,6 +70,8 @@ export type Badge =
   | "gluten_free"; // might be more that I don't know about
 
 export interface ProductInfo {
+  quantity: number;
+
   id: string;
   title: string;
   price: number;
