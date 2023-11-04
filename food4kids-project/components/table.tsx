@@ -9,12 +9,22 @@ interface FoodTableProps {
 }
 
 export default function FoodTable({ selectedPackage }: FoodTableProps) {
-  let mySimpleFoodStats = selectedPackage.simpleFoods.map(Stats.fromSimpleFood);
-  let myProductStats = selectedPackage.products.map(Stats.fromProduct);
-  let overallStats = myProductStats.concat(mySimpleFoodStats);
-  let overallNames = selectedPackage.simpleFoods
-    .map((element) => element.name)
-    .concat(selectedPackage.products.map((element) => element.title));
+  const [overallStats, setOverallStats] = React.useState<Stats[]>([]);
+  const [overallNames, setOverallNames] = React.useState<string[]>([]);
+
+  React.useEffect(() => {
+    console.log("recomput");
+    const mySimpleFoodStats = selectedPackage.simpleFoods.map(
+      Stats.fromSimpleFood
+    );
+    const myProductStats = selectedPackage.products.map(Stats.fromProduct);
+    setOverallStats(myProductStats.concat(mySimpleFoodStats));
+    setOverallNames(
+      selectedPackage.simpleFoods
+        .map((element) => element.name)
+        .concat(selectedPackage.products.map((element) => element.title))
+    );
+  }, [selectedPackage]);
 
   const statCellRenderer = (rowIndex: number, columnIndex: number) => {
     return (
@@ -31,7 +41,7 @@ export default function FoodTable({ selectedPackage }: FoodTableProps) {
   return (
     <div className="overflow-x-auto overflow-y-auto w-full">
       <HotkeysProvider>
-        <Table2 numRows={10}>
+        <Table2 numRows={overallNames.length}>
           {[
             <Column
               name="Food Name"

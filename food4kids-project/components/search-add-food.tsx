@@ -1,5 +1,12 @@
 import React from "react";
-import { MenuItem, Card, Elevation, Intent } from "@blueprintjs/core";
+import {
+  MenuItem,
+  Card,
+  Elevation,
+  Intent,
+  InputGroup,
+  Button,
+} from "@blueprintjs/core";
 import { Suggest } from "@blueprintjs/select";
 import { useEffect, useState } from "react";
 import { type SearchResult } from "@/types";
@@ -9,9 +16,6 @@ interface SearchAddProps {
 }
 
 export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
-  let matchTargetWidth: boolean = false;
-  let minimal: boolean = true;
-
   const [items, setItems] = useState<SearchResult[]>([]);
   const [currentText, setCurrentText] = useState<string>("");
   const [currentSearch, setCurrentSearch] = useState<string>("");
@@ -27,26 +31,23 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
     getStartFood();
   }, [currentSearch]);
 
-  const renderInputValue = (res: SearchResult) => res.name;
-
-  const handleValueChange = (selectedRes: SearchResult) => {
+  const add = (selectedRes: SearchResult) => {
+    console.log("HANDLE VALUE CHANGE!!");
+    console.log("adding", selectedRes);
     addItemToPackage(selectedRes);
   };
 
-  const renderFoodItem = (res: SearchResult) => {
+  const FoodItem = ({ res }: { res: SearchResult }) => {
     let truncated_name = res.name;
     if (res.name.length > 50) {
       truncated_name = res.name.substring(0, 50) + "...";
     }
     return (
-      <MenuItem
+      <Button
         text={truncated_name}
-        intent={
-          res.id.toString().charAt(0) != "S" ? Intent.PRIMARY : Intent.SUCCESS
-        }
+        intent={res.id.startsWith("S") ? Intent.PRIMARY : Intent.SUCCESS}
         icon="add"
-        roleStructure="listoption"
-        key={res.id}
+        onClick={() => add(res)}
       />
     );
   };
@@ -60,25 +61,20 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
             setCurrentSearch(currentText);
           }}
         >
-          <Suggest<SearchResult>
-            closeOnSelect={false}
-            inputValueRenderer={renderInputValue}
-            items={items}
-            itemsEqual="id"
-            itemRenderer={renderFoodItem}
-            noResults={
-              <MenuItem
-                disabled={true}
-                text="No results."
-                roleStructure="listoption"
-              />
-            }
-            onItemSelect={handleValueChange}
-            popoverProps={{ matchTargetWidth, minimal }}
-            query={currentText}
-            onQueryChange={setCurrentText}
+          <InputGroup
+            id="search"
+            value={currentText}
+            onValueChange={setCurrentText}
+            leftIcon="search"
+            placeholder="Search for food items..."
+            type="search"
           />
         </form>
+        <div className="flex flex-row gap-x-4 gap-y-3 flex-wrap mt-4">
+          {items.map((sr) => (
+            <FoodItem key={sr.id} res={sr} />
+          ))}
+        </div>
       </Card>
     </div>
   );

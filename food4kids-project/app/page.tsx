@@ -24,9 +24,11 @@ export default function Home() {
     );
     setSavedPackages(newPackages);
     localStorage.setItem("pkg2", JSON.stringify(newPackages));
+    setSelectedPackage(newPackage);
   };
 
   const addItemToPackage = async ({ id }: SearchResult) => {
+    console.log("additemtopackage", { selectedPackage, id });
     if (!selectedPackage) return;
 
     let newPackage: Package;
