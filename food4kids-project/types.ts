@@ -115,5 +115,6 @@ export interface Package {
   preset: string;
   calories: number;
   weight: number;
-  food: SearchResult[];
+  simpleFoods: SimpleFoodInfo[];
+  products: ProductInfo[];
 }

@@ -1,10 +1,10 @@
 import React from "react";
 import { HotkeysProvider } from "@blueprintjs/core";
 import { Cell, Column, Table2 } from "@blueprintjs/table";
-import { Package, SearchResult } from "@/types";
+import { Package } from "@/types";
 
 interface FoodTableProps {
-  selectedPackageFood: SearchResult[];
+  selectedPackage: Package;
 }
 
 const dollarCellRenderer = (rowIndex: number) => (
@@ -14,7 +14,7 @@ const euroCellRenderer = (rowIndex: number) => (
   <Cell>{`€${(rowIndex * 10 * 0.85).toFixed(2)}`}</Cell>
 );
 
-export default function FoodTable({ selectedPackageFood }: FoodTableProps) {
+export default function FoodTable({ selectedPackage }: FoodTableProps) {
   return (
     <HotkeysProvider>
       <Table2 numRows={10}>

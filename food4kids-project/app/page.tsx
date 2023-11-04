@@ -3,18 +3,15 @@ import { useState, useEffect } from "react";
 import Sidebar from "@/components/sidebar";
 import SearchAddFood from "@/components/search-add-food";
 import EditDetails from "@/components/edit-details";
-import { Package, SearchResult } from "@/types";
+import { Package, ProductInfo, SearchResult, SimpleFoodInfo } from "@/types";
 import FoodTable from "@/components/table";
 
 export default function Home() {
   const [savedPackages, setSavedPackages] = useState<Package[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
-  const [selectedPackageFood, setSelectedPackageFood] = useState<
-    SearchResult[]
-  >([]);
 
   useEffect(() => {
-    const packages = JSON.parse(localStorage.getItem("packages") ?? "[]");
+    const packages = JSON.parse(localStorage.getItem("pkg2") ?? "[]");
     console.log(packages);
     setSelectedPackage(packages ? packages[0] : null);
     setSavedPackages(packages);
@@ -26,18 +23,32 @@ export default function Home() {
       p === selectedPackage ? newPackage : p
     );
     setSavedPackages(newPackages);
-    setSelectedPackage(newPackage);
-    localStorage.setItem("packages", JSON.stringify(newPackages));
+    localStorage.setItem("pkg2", JSON.stringify(newPackages));
   };
 
-  const addItemToPackage = (newItem: SearchResult) => {
-    console.log(newItem);
+  const addItemToPackage = async ({ id }: SearchResult) => {
     if (!selectedPackage) return;
-    let newFoodList = selectedPackage.food;
-    newFoodList.push(newItem);
-    setSelectedPackageFood(newFoodList);
-    selectedPackage.food = newFoodList;
-    editSelectedPackage(selectedPackage);
+
+    let newPackage: Package;
+    if (id.startsWith("S")) {
+      const data = (await (
+        await fetch("/api/simple?id=" + id)
+      ).json()) as SimpleFoodInfo;
+      newPackage = {
+        ...selectedPackage,
+        simpleFoods: [...selectedPackage.simpleFoods, data],
+      };
+    } else {
+      const data = (await (
+        await fetch("/api/product?id=" + id)
+      ).json()) as ProductInfo;
+      newPackage = {
+        ...selectedPackage,
+        products: [...selectedPackage.products, data],
+      };
+    }
+
+    editSelectedPackage(newPackage);
   };
 
   return (
@@ -53,8 +64,10 @@ export default function Home() {
         />
         <div className="flex flex-col w-full bg-slate-200">
           <SearchAddFood {...{ addItemToPackage }} />
-          <EditDetails {...{ selectedPackage, editSelectedPackage }} />
-          <FoodTable {...{ selectedPackageFood }} />
+          {selectedPackage && (
+            <EditDetails {...{ selectedPackage, editSelectedPackage }} />
+          )}
+          {selectedPackage && <FoodTable {...{ selectedPackage }} />}
         </div>
       </div>
     </>

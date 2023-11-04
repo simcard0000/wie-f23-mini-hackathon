@@ -79,4 +79,4 @@ function getCacheFile(url: URL): string {
     return 'cache/' + fullName + '.json';
 }
 
-const SPOONACULAR_API_KEY = 'ab7a8ed20a794764aab217e3e59fa2e5';
+const SPOONACULAR_API_KEY = '6c27dd39427840a6a3e806cbc34d8a65';

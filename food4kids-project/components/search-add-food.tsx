@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Icon,
-  MenuItem,
-  Card,
-  Elevation,
-  Intent,
-  CardList,
-} from "@blueprintjs/core";
-import { type ItemRenderer, Suggest } from "@blueprintjs/select";
+import { MenuItem, Card, Elevation, Intent } from "@blueprintjs/core";
+import { Suggest } from "@blueprintjs/select";
 import { useEffect, useState } from "react";
 import { type SearchResult } from "@/types";
 
@@ -73,6 +66,7 @@ export default function SearchAddFood({ addItemToPackage }: SearchAddProps) {
           <Suggest<SearchResult>
             resetOnQuery={false}
             resetOnClose={false}
+            closeOnSelect={false}
             inputValueRenderer={renderInputValue}
             items={items}
             itemsEqual="id"
