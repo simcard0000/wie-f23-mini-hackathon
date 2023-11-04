@@ -65,7 +65,7 @@ export default function SearchAddFood() {
 
   return (
     <div className="flex flex-column">
-      <Card interactive={false} elevation={Elevation.ONE} className="w-full">
+      <Card interactive={false} elevation={Elevation.ONE}>
         <form
           onSubmit={(e) => {
             e.preventDefault();

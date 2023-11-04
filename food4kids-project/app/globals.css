@@ -7,7 +7,7 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 212, 206, 190;
+  --foreground-rgb: 100, 100, 100;
 }
 
 body {

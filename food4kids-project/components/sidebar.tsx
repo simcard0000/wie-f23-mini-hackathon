@@ -1,12 +1,6 @@
-import React, { use, useEffect, useState, Key } from 'react';
-import { Card, CardList, Section, SectionCard, Button, Icon } from '@blueprintjs/core';
-
-type Package = {
-  name: string;
-  preset: string;
-  calories: number;
-  weight: number;
-};
+import React, { useEffect, useState } from 'react';
+import { Card, CardList, Section, SectionCard, Button } from '@blueprintjs/core';
+import { Package } from '../types';
 
 const defaultPackage: Package = {
   name: 'Untitled',
@@ -15,34 +9,30 @@ const defaultPackage: Package = {
   weight: 0,
 };
 
-export default function Sidebar() {
-  const [savedPackages, setSavedPackages] = useState<Package[]>([]);
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
+interface SidebarProps {
+  savedPackages: Package[];
+  setSavedPackages: (packages: Package[]) => void;
+  selectedPackage: Package | null;
+  setSelectedPackage: (selectedPackage: Package | null) => void;
+}
 
-  useEffect(() => {
-    const packages = JSON.parse(localStorage.getItem('packages') ?? '[]');
-    console.log(packages);
-    setSelectedPackage(packages ? packages[0] : null);
-    setSavedPackages(packages);
-  }, []);
-
+export default function Sidebar({
+  savedPackages,
+  setSavedPackages,
+  selectedPackage,
+  setSelectedPackage,
+}: SidebarProps) {
   const addPackage = () => {
     const newPackage = { ...defaultPackage };
     setSelectedPackage(newPackage);
-    setSavedPackages([
-      newPackage,
-      ...savedPackages,
-    ]);
-    localStorage.setItem('packages', JSON.stringify([
-      newPackage,
-      ...savedPackages,
-    ]));
-  }
+    setSavedPackages([newPackage, ...savedPackages]);
+    localStorage.setItem('packages', JSON.stringify([newPackage, ...savedPackages]));
+  };
 
   const renderPackage = (props: Package, index: number) => {
     const { name, preset, calories, weight } = props;
     const selected = selectedPackage === props;
-  
+
     return (
       <Card
         key={index}
@@ -54,11 +44,11 @@ export default function Sidebar() {
         onClick={() => {
           if (selected) return;
           setSelectedPackage(selected ? null : props);
-          setSavedPackages(savedPackages.filter(p => p.calories !== 0));
+          setSavedPackages(savedPackages.filter(p => p !== defaultPackage));
           localStorage.setItem('packages', JSON.stringify(savedPackages.filter(p => p.calories !== 0)));
         }}
       >
-        <div className='flex flex-col ml-auto w-full pr-5'>
+        <div className='flex flex-col ml-auto w-full pr-2'>
           <div className='flex flex-row justify-between text-sm font-bold'>
             <div>{name}</div>
             <div className='text-right'>{weight} g</div>
@@ -80,11 +70,9 @@ export default function Sidebar() {
         subtitle='Calculate the nutrition + weight of your food selection and save your package'
         className='py-5'
       ></Section>
-      <Section title='Packages' rightElement={<Button icon='plus' minimal onClick={addPackage}/>} elevation={0}>
+      <Section title='Packages' rightElement={<Button icon='plus' minimal onClick={addPackage} />} elevation={0}>
         <SectionCard padded={false}>
-          <CardList>
-            {savedPackages.map(renderPackage)}
-          </CardList>
+          <CardList>{savedPackages.map(renderPackage)}</CardList>
         </SectionCard>
       </Section>
     </aside>
