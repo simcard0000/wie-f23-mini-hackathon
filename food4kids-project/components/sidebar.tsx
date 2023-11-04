@@ -44,11 +44,11 @@ export default function Sidebar({
         onClick={() => {
           if (selected) return;
           setSelectedPackage(selected ? null : props);
-          setSavedPackages(savedPackages.filter(p => p.calories !== 0));
+          setSavedPackages(savedPackages.filter(p => p !== defaultPackage));
           localStorage.setItem('packages', JSON.stringify(savedPackages.filter(p => p.calories !== 0)));
         }}
       >
-        <div className='flex flex-col ml-auto w-full pr-5'>
+        <div className='flex flex-col ml-auto w-full pr-2'>
           <div className='flex flex-row justify-between text-sm font-bold'>
             <div>{name}</div>
             <div className='text-right'>{weight} g</div>
